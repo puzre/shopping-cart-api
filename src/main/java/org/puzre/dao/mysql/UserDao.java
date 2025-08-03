@@ -4,7 +4,7 @@ import org.puzre.dao.exception.DaoException;
 import org.puzre.dao.IUserDao;
 import org.puzre.model.User;
 
-import java.sql.Connection;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +19,10 @@ public class UserDao implements IUserDao {
     final String GET_ALL = "SELECT id, name, phone FROM users";
     final String FIND_BY_ID = "SELECT id, name, phone FROM users WHERE id = ?";
 
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public UserDao(Connection connection) {
-        this.connection = connection;
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class UserDao implements IUserDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement = dataSource.getConnection().prepareStatement(INSERT);
 
             preparedStatement.setLong(1, user.getId());
             preparedStatement.setString(2, user.getName());
@@ -56,7 +56,7 @@ public class UserDao implements IUserDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement = dataSource.getConnection().prepareStatement(UPDATE);
 
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPhone());
@@ -80,7 +80,7 @@ public class UserDao implements IUserDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(DELETE);
+            preparedStatement = dataSource.getConnection().prepareStatement(DELETE);
 
             preparedStatement.setLong(1, user.getId());
 
@@ -105,7 +105,7 @@ public class UserDao implements IUserDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(GET_ALL);
+            preparedStatement = dataSource.getConnection().prepareStatement(GET_ALL);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -138,7 +138,7 @@ public class UserDao implements IUserDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(FIND_BY_ID);
+            preparedStatement = dataSource.getConnection().prepareStatement(FIND_BY_ID);
 
             preparedStatement.setLong(1, id);
 

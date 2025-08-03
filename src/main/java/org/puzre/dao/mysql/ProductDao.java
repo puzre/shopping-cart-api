@@ -4,7 +4,7 @@ import org.puzre.dao.IProductDao;
 import org.puzre.dao.exception.DaoException;
 import org.puzre.model.Product;
 
-import java.sql.Connection;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +19,10 @@ public class ProductDao implements IProductDao {
     final String GET_ALL = "SELECT id, name, price FROM products";
     final String FIND_BY_ID = "SELECT id, name, price FROM products WHERE id = ?";
 
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public ProductDao(Connection connection) {
-        this.connection = connection;
+    public ProductDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ProductDao implements IProductDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement = dataSource.getConnection().prepareStatement(INSERT);
             preparedStatement.setString(1, product.getName());
             preparedStatement.setBigDecimal(2, product.getPrice());
 
@@ -54,7 +54,7 @@ public class ProductDao implements IProductDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement = dataSource.getConnection().prepareStatement(UPDATE);
 
             preparedStatement.setString(1, product.getName());
             preparedStatement.setBigDecimal(2, product.getPrice());
@@ -77,7 +77,7 @@ public class ProductDao implements IProductDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(DELETE);
+            preparedStatement = dataSource.getConnection().prepareStatement(DELETE);
             preparedStatement.setLong(1, product.getId());
 
             if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in delete");
@@ -99,7 +99,7 @@ public class ProductDao implements IProductDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(GET_ALL);
+            preparedStatement = dataSource.getConnection().prepareStatement(GET_ALL);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -130,7 +130,7 @@ public class ProductDao implements IProductDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(FIND_BY_ID);
+            preparedStatement = dataSource.getConnection().prepareStatement(FIND_BY_ID);
             preparedStatement.setLong(1, id);
 
             resultSet = preparedStatement.executeQuery();

@@ -3,10 +3,9 @@ package org.puzre.dao.mysql;
 import org.puzre.dao.IOrderDao;
 import org.puzre.dao.exception.DaoException;
 import org.puzre.model.Order;
-import org.puzre.model.Product;
 import org.puzre.model.Status;
 
-import java.sql.Connection;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +21,10 @@ public class OrderDao implements IOrderDao {
     private final String FIND_BY_ID = "SELECT id, status, total, user_id FROM orders WHERE id = ?";
     private final String GET_RELATION_BY_ID = "SELECT p.id, p.name, p.price FROM orders_products op INNER JOIN products p WHERE op.order_id = ?";
 
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public OrderDao(Connection connection) {
-        this.connection = connection;
+    public OrderDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class OrderDao implements IOrderDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement = dataSource.getConnection().prepareStatement(INSERT);
 
             preparedStatement.setString(1, order.getStatus().toString());
             preparedStatement.setBigDecimal(2, order.getTotal());
@@ -58,7 +57,7 @@ public class OrderDao implements IOrderDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement = dataSource.getConnection().prepareStatement(UPDATE);
 
             preparedStatement.setString(1, order.getStatus().toString());
             preparedStatement.setBigDecimal(2, order.getTotal());
@@ -81,7 +80,7 @@ public class OrderDao implements IOrderDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(DELETE);
+            preparedStatement = dataSource.getConnection().prepareStatement(DELETE);
 
             preparedStatement.setLong(1, order.getId());
 
@@ -104,7 +103,7 @@ public class OrderDao implements IOrderDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(GET_ALL);
+            preparedStatement = dataSource.getConnection().prepareStatement(GET_ALL);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -135,7 +134,7 @@ public class OrderDao implements IOrderDao {
 
         try {
 
-            preparedStatement = connection.prepareStatement(FIND_BY_ID);
+            preparedStatement = dataSource.getConnection().prepareStatement(FIND_BY_ID);
 
             preparedStatement.setLong(1, id);
 
@@ -158,40 +157,5 @@ public class OrderDao implements IOrderDao {
         }
 
         return order;
-    }
-
-    @Override
-    public List<Product> getAllRelationById(Long id) throws DaoException {
-
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        List<Product> productList = new ArrayList<>();
-
-        try {
-
-            preparedStatement = connection.prepareStatement(GET_RELATION_BY_ID);
-
-            preparedStatement.setLong(1, id);
-
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                productList.add(
-                        Product.builder()
-                                .id(resultSet.getLong("id"))
-                                .name(resultSet.getString("name"))
-                                .price(resultSet.getBigDecimal("price"))
-                                .build()
-                );
-            }
-
-        } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
-        } finally {
-            UtilsDao.closePreparedStatement(preparedStatement);
-            UtilsDao.closeResultSet(resultSet);
-        }
-
-        return productList;
     }
 }
