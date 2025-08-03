@@ -7,10 +7,10 @@ import java.util.List;
 public interface IDao<T, K> {
 
     void insert(T t) throws DaoException;
-    void update(T t);
-    void delete(T t);
-    List<T> getAll();
-    T getById(K id);
-    T getByIds(K pId, K sId);
+    void update(T t) throws DaoException;
+    void delete(T t) throws DaoException;
+    List<T> getAll() throws DaoException;
+    T findById(K id) throws DaoException;
+    
 
 }
