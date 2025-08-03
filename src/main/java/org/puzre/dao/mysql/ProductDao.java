@@ -42,13 +42,7 @@ public class ProductDao implements IProductDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception preparedStatement close", e);
-                }
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -71,11 +65,7 @@ public class ProductDao implements IProductDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception preparedStatement close");
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -95,11 +85,7 @@ public class ProductDao implements IProductDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception preparedStatement close");
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -128,16 +114,8 @@ public class ProductDao implements IProductDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao Exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement", e);
-            }
-            if (resultSet != null) try {
-                resultSet.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing resultSet", e);
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return productList;
@@ -168,18 +146,8 @@ public class ProductDao implements IProductDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement", e);
-            }
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception closing resulSet", e);
-                }
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return product;

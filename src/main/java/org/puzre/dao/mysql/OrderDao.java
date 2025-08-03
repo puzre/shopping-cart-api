@@ -46,11 +46,7 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement", e);
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -73,11 +69,7 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao Exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement", e);
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -98,11 +90,7 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement");
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -131,16 +119,8 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement");
-            }
-            if (resultSet != null) try {
-                resultSet.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing resultSet");
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return orderList;
@@ -173,16 +153,8 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null) try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing preparedStatement");
-            }
-            if (resultSet != null) try {
-                resultSet.close();
-            } catch (SQLException e) {
-                throw new DaoException("Exception closing resultSet");
-            }
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return order;
@@ -216,18 +188,8 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null)
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception closing preparedStatement", e);
-                }
-            if (resultSet != null)
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception closing resultSet", e);
-                }
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return productList;

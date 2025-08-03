@@ -45,19 +45,18 @@ public class UserDao implements IUserDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null)
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception closing preparedStatement");
-                }
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
     }
 
     @Override
     public void update(User user) throws DaoException {
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement(UPDATE);
 
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPhone());
@@ -68,6 +67,8 @@ public class UserDao implements IUserDao {
 
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
+        } finally {
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -90,13 +91,7 @@ public class UserDao implements IUserDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao Exception", e);
         } finally {
-            if (preparedStatement != null)
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception preparedStatement close", e);
-                }
-
+            UtilsDao.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -126,20 +121,8 @@ public class UserDao implements IUserDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (resultSet != null)
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception resultSet close", e);
-                }
-
-            if (preparedStatement != null)
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception preparedStatement close", e);
-                }
-
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return userList;
@@ -174,20 +157,8 @@ public class UserDao implements IUserDao {
         } catch (SQLException e) {
             throw new DaoException("SQL Dao exception", e);
         } finally {
-            if (preparedStatement != null)
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception connection close");
-                }
-
-            if (resultSet != null)
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    throw new DaoException("Exception resultSet close");
-                }
-
+            UtilsDao.closePreparedStatement(preparedStatement);
+            UtilsDao.closeResultSet(resultSet);
         }
 
         return user;
