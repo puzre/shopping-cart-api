@@ -1,4 +1,4 @@
-package org.puzre.dao.exception;
+package org.puzre.adapter.infrastructure.dao.exception;
 
 public class DaoException extends Exception {
 
