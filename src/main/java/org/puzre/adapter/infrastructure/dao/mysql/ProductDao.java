@@ -88,7 +88,7 @@ public class ProductDao implements IProductDao {
     }
 
     @Override
-    public List<ProductEntity> getAll() throws DaoException {
+    public List<ProductEntity> list() throws DaoException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
