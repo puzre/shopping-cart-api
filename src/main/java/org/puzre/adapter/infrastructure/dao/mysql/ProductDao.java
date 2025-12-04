@@ -31,15 +31,14 @@ public class ProductDao implements IProductDao {
             preparedStatement.setString(1, productEntity.getName());
             preparedStatement.setBigDecimal(2, productEntity.getPrice());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in insert");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to insert a product");
 
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to insert a product", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
@@ -56,14 +55,13 @@ public class ProductDao implements IProductDao {
             preparedStatement.setBigDecimal(2, productEntity.getPrice());
             preparedStatement.setLong(3, productEntity.getId());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in update");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to update a product");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to update a product", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
@@ -77,18 +75,17 @@ public class ProductDao implements IProductDao {
             preparedStatement = daoUtils.getConnection().prepareStatement(DELETE);
             preparedStatement.setLong(1, productEntity.getId());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in delete");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to delete a product");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to delete a product", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
-    public List<ProductEntity> getAll() throws DaoException {
+    public List<ProductEntity> list() throws DaoException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -110,7 +107,7 @@ public class ProductDao implements IProductDao {
             }
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao Exception", e);
+            throw new DaoException("Exception trying to list all products", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
             daoUtils.closeResultSet(resultSet);
@@ -140,10 +137,10 @@ public class ProductDao implements IProductDao {
                         .name(resultSet.getString("name"))
                         .price(resultSet.getBigDecimal("price"))
                         .build();
-            else throw new DaoException("Product not found");
+            else throw new DaoException("Exception trying to find an specific product");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to find an specific product", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
             daoUtils.closeResultSet(resultSet);

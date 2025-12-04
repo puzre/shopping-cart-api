@@ -18,8 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderDao implements IOrderDao {
 
-    private final String GET_RELATION_BY_ID = "SELECT p.id, p.name, p.price FROM orders_products op INNER JOIN products p WHERE op.order_id = ?";
-
     private final DaoUtils daoUtils;
 
     @Override
@@ -36,14 +34,13 @@ public class OrderDao implements IOrderDao {
             preparedStatement.setBigDecimal(2, orderEntity.getTotal());
             preparedStatement.setLong(3, orderEntity.getUserId());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in insert");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to insert a order row");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to insert a order row", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
@@ -60,14 +57,13 @@ public class OrderDao implements IOrderDao {
             preparedStatement.setBigDecimal(2, orderEntity.getTotal());
             preparedStatement.setLong(3, orderEntity.getUserId());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in update");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to update a order row");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao Exception", e);
+            throw new DaoException("Exception trying to update a order row", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
@@ -82,18 +78,17 @@ public class OrderDao implements IOrderDao {
 
             preparedStatement.setLong(1, orderEntity.getId());
 
-            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception in delete");
+            if (preparedStatement.executeUpdate() == 0) throw new DaoException("Exception trying to delete a order row");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to delete a order row", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
-    public List<OrderEntity> getAll() throws DaoException {
+    public List<OrderEntity> list() throws DaoException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -115,7 +110,7 @@ public class OrderDao implements IOrderDao {
             }
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to list all orders", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
             daoUtils.closeResultSet(resultSet);
@@ -150,7 +145,7 @@ public class OrderDao implements IOrderDao {
             else throw new DaoException("Order not found");
 
         } catch (SQLException e) {
-            throw new DaoException("SQL Dao exception", e);
+            throw new DaoException("Exception trying to find an specific order", e);
         } finally {
             daoUtils.closePreparedStatement(preparedStatement);
             daoUtils.closeResultSet(resultSet);

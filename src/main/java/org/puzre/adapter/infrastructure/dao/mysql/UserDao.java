@@ -94,7 +94,7 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public List<UserEntity> getAll() throws DaoException {
+    public List<UserEntity> list() throws DaoException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
